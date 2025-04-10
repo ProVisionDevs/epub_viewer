@@ -57,13 +57,17 @@ class EpubController {
   }
 
   ///Parsing chapters list form epub
-  Future<List<EpubChapter>> parseChapters() async {
+  /// (PVD Fix) type '_Map<Object?, Object?>' is not a subtype of type 'Map<String, dynamic>'
+   Future<List<EpubChapter>> parseChapters() async {
     if (_chapters.isNotEmpty) return _chapters;
     checkEpubLoaded();
-    final result =
-        await webViewController!.evaluateJavascript(source: 'getChapters()');
-    _chapters =
-        List<EpubChapter>.from(result.map((e) => EpubChapter.fromJson(e)));
+    final result = await webViewController!.evaluateJavascript(source: 'getChapters()');
+  
+    _chapters = List<EpubChapter>.from(
+      (result as List).map(
+        (e) => EpubChapter.fromJson(Map<String, dynamic>.from(e as Map)),
+      ),
+    );
     return _chapters;
   }
 
