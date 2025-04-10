@@ -65,11 +65,9 @@ class EpubController {
   final result = await webViewController!.evaluateJavascript(source: 'getChapters()');
 
   // ✅ This safely casts each chapter to Map<String, dynamic>
-  _chapters = List<EpubChapter>.from(
-    (result as List).map(
-      (e) => EpubChapter.fromJson(Map<String, dynamic>.from(e as Map)),
-    ),
-  );
+ _chapters = List<EpubChapter>.from(
+  result.map((e) => EpubChapter.fromJson(Map<String, dynamic>.from(e))),
+);
 
   return _chapters;
 }
